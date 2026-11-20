@@ -45,6 +45,18 @@
       "scale": 4
     },
     {
+      "name": "2x-AnimeSharpV3-fp16",
+      "scale": 2
+    },
+    {
+      "name": "2x-AnimeSharpV3-fp32",
+      "scale": 2
+    },
+    {
+      "name": "2x-AnimeSharpV4_RCAN",
+      "scale": 2
+    },
+    {
       "name": "2x-ESRGAN",
       "scale": 2
     },
@@ -55,7 +67,7 @@
   ],
   "IMAGE_DIM_MIN": 256,
   "IMAGE_DIM_OPT": 512,
-  "IMAGE_DIM_MAX": 1280,
+  "IMAGE_DIM_MAX": 2048,
   "precision": {
     "options": ["fp16", "fp32"],
     "default": "fp16",
