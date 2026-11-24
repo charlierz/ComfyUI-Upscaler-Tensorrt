@@ -213,8 +213,14 @@ class Engine:
         config = builder.create_builder_config()
         config.progress_monitor = TQDMProgressMonitor()
 
-        # TensorRT-RTX only allows strongly typed networks, so precision is dependent on the model
-        config.set_flag(trt.BuilderFlag.FP16) if fp16 and not TENSORRT_RTX_AVAILABLE else None
+        # TensorRT-RTX only allows strongly typed networks, so precision is dependent on the model.
+        # TensorRT 11 also removed weak-typing precision flags like BuilderFlag.FP16.
+        if fp16 and not TENSORRT_RTX_AVAILABLE:
+            fp16_flag = getattr(trt.BuilderFlag, "FP16", None)
+            if fp16_flag is not None:
+                config.set_flag(fp16_flag)
+            else:
+                warning("TensorRT does not expose BuilderFlag.FP16; building with model-declared precision")
         config.set_flag(trt.BuilderFlag.REFIT) if enable_refit else None
 
         profiles = copy.deepcopy(p)
