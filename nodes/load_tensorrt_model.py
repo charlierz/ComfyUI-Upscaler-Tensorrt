@@ -70,7 +70,7 @@ class LoadUpscalerTensorrtModel:
                 mm.soft_empty_cache()
                 s = time.time()
                 engine = Engine(tensorrt_model_path)
-                engine.build(
+                build_status = engine.build(
                     onnx_path=onnx_model_path,
                     fp16= True if precision == "fp16" and not TENSORRT_RTX_AVAILABLE else False,
                     input_profile=[
@@ -79,6 +79,8 @@ class LoadUpscalerTensorrtModel:
                 )
                 e = time.time()
                 logger.info(f"Time taken to build: {(e-s)} seconds")
+                if build_status != 0 or not os.path.exists(tensorrt_model_path):
+                    raise RuntimeError(f"Failed to build TensorRT engine: {tensorrt_model_path}")
 
             logger.info(f"Loading TensorRT engine: {tensorrt_model_path}")
             mm.soft_empty_cache()
